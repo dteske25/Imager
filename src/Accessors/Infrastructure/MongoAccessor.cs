@@ -1,8 +1,9 @@
-﻿using MongoDB.Driver;
+﻿using Core.Interfaces;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Accessors.Infrastructure
 {
@@ -16,7 +17,7 @@ namespace Accessors.Infrastructure
 
         public IQueryable<T> AsQueryable()
         {
-            return _collection.Find(null).ToEnumerable().AsQueryable();
+            return _collection.AsQueryable();
         }
 
         public bool Contains(Expression<Func<T, bool>> where)
@@ -66,5 +67,4 @@ namespace Accessors.Infrastructure
         }
     }
 
-}
 }

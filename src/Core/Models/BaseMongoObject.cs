@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Core.Models
 {
-    public abstract class AbstractMongoObject
+    public abstract class BaseMongoObject
     {
         [BsonId]
         [BsonElement("_id")]

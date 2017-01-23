@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 using System.IO;
+using Core.Interfaces;
+using Core.Models;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,6 +16,11 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class ImageController : Controller
     {
+        IPictureAccessor _pictureAccessor;
+        public ImageController(IPictureAccessor pictureAccessor)
+        {
+            _pictureAccessor = pictureAccessor;
+        }
         // POST api/values
         [HttpPost("upload")]
         public JsonResult Post([FromForm]IFormFile file)
@@ -33,6 +40,14 @@ namespace WebApi.Controllers
                 image = ms.ToArray();
             }
 
+            _pictureAccessor.Insert(new Picture()
+            {
+                Data = image,
+                UploadDate = DateTime.UtcNow,
+                Title = file.FileName,
+                ContentType = file.ContentType,
+            });
+
             return Json("Success");
         }
 
@@ -42,9 +57,17 @@ namespace WebApi.Controllers
             return Json("Up and running");
         }
 
-        //[HttpGet("image/{title}")]
-        //public IFormFile Get([FromRoute]string title)
-        //{
-        //}
+        [HttpGet("_all")]
+        public JsonResult Get()
+        {
+            return Json(_pictureAccessor.GetAllTitles());
+        }
+
+        [HttpGet("{title}")]
+        public FileContentResult Get([FromRoute]string title)
+        {
+            var picture = _pictureAccessor.Find(p => p.Title == title).Single();
+            return new FileContentResult(picture.Data, picture.ContentType);
+        }
     }
 }

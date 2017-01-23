@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Accessors.Infrastructure;
+﻿using Accessors.Infrastructure;
+using Core.Interfaces;
+using Accessors;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -12,7 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMongo(this IServiceCollection services, string connectionString)
         {
             services.AddScoped(p => new MongoContext(connectionString));
-
+            services.AddTransient<IPictureAccessor, PictureAccessor>();
             return services;
         }
     }
