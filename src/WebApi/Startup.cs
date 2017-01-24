@@ -29,7 +29,7 @@ namespace WebApi
         {
             // Add framework services.
             services.AddMvc();
-            services.AddMongo(Configuration["Data:mongodb"]);
+            services.AddMongo(Configuration["MongoConnectionString"]);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
